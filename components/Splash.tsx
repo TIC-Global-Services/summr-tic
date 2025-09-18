@@ -93,8 +93,8 @@ const Splash: React.FC = () => {
     // Preload critical resources
     const preloadResources = () => {
       const criticalAssets = [
-        "/models/summrHero.glb",
-        "/models/summrSpray.glb",
+        "/models/s.glb",
+        "/models/sp.glb",
         "/customize/case-navy.glb",
         "/customize/case-pink.glb",
         "/customize/case-silver.glb",

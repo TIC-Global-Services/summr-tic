@@ -114,7 +114,7 @@ function SticktModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => voi
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#animation-container",
-        start: "top-=3100 top",
+        start: "top-=2700 top",
         end: "bottom bottom",
         scrub: 1,
         invalidateOnRefresh: true,
@@ -202,7 +202,7 @@ function SprayModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => void
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#animation-container",
-        start: "top-=3100 top",
+        start: "top-=2700 top",
         end: "bottom bottom",
         scrub: 1,
         invalidateOnRefresh: true,
@@ -289,7 +289,7 @@ function CameraSetup() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#animation-container",
-        start: "top-=3100 top",
+        start: "top-=2700 top",
         end: "bottom bottom",
         scrub: 1,
         invalidateOnRefresh: true,

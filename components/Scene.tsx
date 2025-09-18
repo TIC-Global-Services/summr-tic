@@ -1,5 +1,5 @@
 "use client";
-import { Environment, useGLTF } from "@react-three/drei";
+import { Environment, useGLTF, Stats } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { gsap } from "gsap";
@@ -82,7 +82,7 @@ function SticktModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => voi
   const groupRef = useRef<THREE.Group>(null);
   const isMobile = useMobile();
 
-  // Memoized animation values
+  // Memoized animation values - keeping your exact values
   const animationConfig = useMemo(() => ({
     sections: [
       {
@@ -108,7 +108,8 @@ function SticktModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => voi
     ]
   }), [isMobile]);
 
-  useGSAPAnimation(() => {
+  // Performance optimization: reduce dependency array changes
+  const stableCallback = useCallback(() => {
     if (!groupRef.current) return;
 
     const tl = gsap.timeline({
@@ -133,7 +134,9 @@ function SticktModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => voi
         .to(groupRef.current!.position, { ...config.position, ease, duration }, startTime)
         .to(groupRef.current!.rotation, { ...config.rotation, ease, duration }, startTime);
     });
-  }, [isMobile, scene, setIsAbsolute, animationConfig], 200);
+  }, [animationConfig, setIsAbsolute]);
+
+  useGSAPAnimation(stableCallback, [stableCallback], 200);
 
   // Optimize material properties
   useEffect(() => {
@@ -167,7 +170,7 @@ function SprayModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => void
   const groupRef = useRef<THREE.Group>(null);
   const isMobile = useMobile();
 
-  // Memoized animation configuration
+  // Memoized animation configuration - keeping your exact values
   const animationConfig = useMemo(() => ({
     sections: [
       {
@@ -193,10 +196,8 @@ function SprayModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => void
     ]
   }), [isMobile]);
 
-
-
-  // Main scroll animation
-  useGSAPAnimation(() => {
+  // Performance optimization: stable callback
+  const stableCallback = useCallback(() => {
     if (!groupRef.current) return;
 
     const tl = gsap.timeline({
@@ -234,7 +235,10 @@ function SprayModel({ setIsAbsolute }: { setIsAbsolute: (value: boolean) => void
           .to(groupRef.current!.rotation, { ...config.rotation, ease, duration }, startTime);
       }
     });
-  }, [isMobile, scene, setIsAbsolute, animationConfig], 250);
+  }, [animationConfig, setIsAbsolute]);
+
+  // Main scroll animation
+  useGSAPAnimation(stableCallback, [stableCallback], 250);
 
   if (!scene) return null;
 
@@ -250,7 +254,7 @@ function CameraSetup() {
   const camRef = useRef({ yaw: 90, pitch: 85, distance: 12 });
   const isMobile = useMobile();
 
-  // Memoized camera configuration
+  // Memoized camera configuration - keeping your exact values
   const cameraConfig = useMemo(() => {
     const baseDistance = isMobile ? 18 : 16;
     return {
@@ -284,8 +288,8 @@ function CameraSetup() {
     updateCamera();
   }, [cameraConfig.baseDistance, updateCamera]);
 
-  // Camera animation
-  useGSAPAnimation(() => {
+  // Performance optimization: stable callback
+  const stableCallback = useCallback(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#animation-container",
@@ -334,7 +338,10 @@ function CameraSetup() {
       ease: "power3.inOut",
       duration: 0.25,
     }, 0.75);
-  }, [cameraConfig, updateCamera], 300);
+  }, [cameraConfig, updateCamera]);
+
+  // Camera animation
+  useGSAPAnimation(stableCallback, [stableCallback], 300);
 
   return null;
 }
@@ -343,22 +350,34 @@ const Scene = () => {
   const [isAbsolute, setIsAbsolute] = useState(false);
   const [absoluteTop, setAbsoluteTop] = useState(0);
 
-  // Optimized absolute position calculation
+  // Optimized absolute position calculation with throttling
   useEffect(() => {
     if (!isAbsolute) return;
 
-    const animationContainer = document.getElementById("animation-container");
-    if (!animationContainer) return;
-
-    const rect = animationContainer.getBoundingClientRect();
-    const scrollY = window.scrollY;
-    const offset = window.innerHeight * 0.99;
-    const containerBottom = scrollY + rect.bottom;
+    let rafId: number;
     
-    setAbsoluteTop(containerBottom - offset);
+    const updateAbsoluteTop = () => {
+      rafId = requestAnimationFrame(() => {
+        const animationContainer = document.getElementById("animation-container");
+        if (!animationContainer) return;
+
+        const rect = animationContainer.getBoundingClientRect();
+        const scrollY = window.scrollY;
+        const offset = window.innerHeight * 0.99;
+        const containerBottom = scrollY + rect.bottom;
+        
+        setAbsoluteTop(containerBottom - offset);
+      });
+    };
+
+    updateAbsoluteTop();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [isAbsolute]);
 
-  // Memoized Canvas props for performance
+  // Memoized Canvas props for performance - keeping your settings
   const canvasProps = useMemo(() => ({
     camera: {
       fov: 45,
@@ -393,6 +412,7 @@ const Scene = () => {
     >
       <Canvas {...canvasProps}>
         <Environment preset="city" background={false} />
+        <Stats />
         <CameraSetup />
         <SticktModel setIsAbsolute={setIsAbsolute} />
         <SprayModel setIsAbsolute={setIsAbsolute} />

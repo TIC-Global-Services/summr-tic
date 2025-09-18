@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F2F6FF;
+  --foreground: #ffffff;
+  overflow-x: hidden;
+
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #F2F6FF;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+   font-family: var(--font-poppins);
+
+  overflow-x: hidden;
+}
+
+* {
+  cursor: none !important;
+}
+
+
+
+.font-gellix {
+  font-family: var(--font-gellix-regular);
+}
+
+.font-pop {
+  font-family: var(--font-poppins);
+}
+
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 12s linear infinite;
+  }
+}
+
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-x: hidden;
+
+}
+
+
+
+
+/* styles/globals.css */
+
+
+.custom-percentage {
+  font-family: var(--font-orbitron), monospace;
+}
+
+/* Unique Progress Bar Styling */
+.unique-progress-bar {
+  background: linear-gradient(
+    45deg,
+    #ff6b6b 0%,
+    #4ecdc4 25%,
+    #45b7d1 50%,
+    #96ceb4 75%,
+    #feca57 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientFlow 3s ease infinite;
+  box-shadow:
+    0 0 20px rgba(255, 107, 107, 0.6),
+    0 0 40px rgba(78, 205, 196, 0.4),
+    0 0 60px rgba(69, 183, 209, 0.3);
+  position: relative;
+}
+
+.unique-progress-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  animation: progressShine 2.5s infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes progressShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.custom-percentage {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #e0f2ff 25%,
+    #ffffff 50%,
+    #f0f9ff 75%,
+    #ffffff 100%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 2s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.progress-glow {
+  box-shadow:
+    0 0 20px rgba(255, 107, 107, 0.4),
+    0 0 40px rgba(255, 107, 107, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.progress-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}

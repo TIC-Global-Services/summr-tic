@@ -1,0 +1,5 @@
+export {default as Image1} from '@/assets/Why/1.png'
+export {default as Image2} from '@/assets/Why/2.png'
+export {default as Image3} from '@/assets/Why/3.png'
+export {default as Image4} from '@/assets/Why/4.png'
+export {default as Image5} from '@/assets/Why/5.png'

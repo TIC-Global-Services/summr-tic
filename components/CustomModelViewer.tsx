@@ -182,16 +182,7 @@ const CustomModelViewer = ({
             toneMappingExposure: exposure,
           }}
         >
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 10, 5]} intensity={1.5} castShadow />
-          <directionalLight position={[-5, 5, -5]} intensity={0.7} />
-          <spotLight
-            position={[0, 10, 10]}
-            angle={0.3}
-            penumbra={0.5}
-            intensity={1}
-            castShadow
-          />
+    
           <Environment
             preset={environment as any}
             environmentIntensity={environmentIntensity}

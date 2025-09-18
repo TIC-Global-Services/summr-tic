@@ -386,9 +386,9 @@ const Scene = () => {
       position: [16, 14, 16] as [number, number, number],
     },
     gl: {
-      antialias: true,
+      antialias: false,
       alpha: true,
-      powerPreference: "high-performance" as const,
+      
     },
     dpr: typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1,
   }), []);
@@ -412,7 +412,7 @@ const Scene = () => {
     >
       <Canvas {...canvasProps}>
         <Environment preset="city" background={false} />
-        {/* <Stats /> */}
+        <Stats />
         <CameraSetup />
         <SticktModel setIsAbsolute={setIsAbsolute} />
         <SprayModel setIsAbsolute={setIsAbsolute} />

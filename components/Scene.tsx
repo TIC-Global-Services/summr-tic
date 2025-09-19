@@ -412,7 +412,7 @@ const Scene = () => {
     >
       <Canvas {...canvasProps}>
         <Environment preset="city" background={false} />
-        <Stats />
+        {/* <Stats /> */}
         <CameraSetup />
         <SticktModel setIsAbsolute={setIsAbsolute} />
         <SprayModel setIsAbsolute={setIsAbsolute} />

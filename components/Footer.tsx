@@ -4,6 +4,8 @@ import { InstgramLogo, MailLogo, PhoneLogo } from "@/assets/Footer";
 import Link from "next/link";
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex flex-col items-center justify-center md:py-20 py-8 bg-transparent xl:px-0 lg:px-5 px-5">
       <Image
@@ -39,7 +41,7 @@ const Footer = () => {
               alt="Instagram Logo"
               className="w-6 h-6 group-hover:scale-110 transition-transform duration-200"
             />
-            <span className="text-[#8FB78F] text-[16px] group-hover:underline underline-offset-4">
+            <span className="text-[#8FB78F] md:text-[16px] text-[12px] group-hover:underline underline-offset-4">
               @getsummr
             </span>
           </Link>
@@ -55,14 +57,14 @@ const Footer = () => {
             alt="Email Logo"
             className="w-6 h-6 group-hover:scale-110 transition-transform duration-200"
           />
-          <span className="text-[#8FB78F] text-[16px] group-hover:underline underline-offset-4">
+          <span className="text-[#8FB78F] md:text-[16px] text-[12px] group-hover:underline underline-offset-4">
             info@summr.com
           </span>
         </Link>
       </div>
 
       {/* Instagram (Mobile) */}
-      <div className="flex flex-row gap-4 md:hidden mt-7">
+      <div className="flex flex-row gap-4 md:hidden md:mt-7 mt-2">
         <Link
           href="https://www.instagram.com/getsummr?igsh=MWl6cmY0Z29sYWozcg=="
           target="_blank"
@@ -74,11 +76,30 @@ const Footer = () => {
             alt="Instagram Logo"
             className="w-6 h-6 group-hover:scale-110 transition-transform duration-200"
           />
-          <span className="text-[#8FB78F] text-[16px] group-hover:underline underline-offset-4">
+          <span className="text-[#8FB78F] md:text-[16px] text-[12px] group-hover:underline underline-offset-4">
             @getsummr
           </span>
         </Link>
       </div>
+
+<div className="flex md:flex-row flex-col gap-3 items-center md:text-[16px] text-[12px] justify-between max-w-6xl w-full text-[#8FB78F] md:mt-2 mt-5">
+   @ {currentYear} Summr
+<div>
+  <p className="md:text-start text-center ">
+          Designed & Developed by  <Link 
+      href="https://theinternetcompany.one/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:underline underline-offset-4"
+    >
+      The Internet Company
+    </Link>
+        </p>
+     
+
+</div>
+</div>
+
     </div>
   );
 };

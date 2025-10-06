@@ -14,10 +14,12 @@ import SweatLess from "@/components/SweatLess";
 import WhySummr from "@/components/WhySummr";
 import Scene from "@/components/Scene";
 import Splash from "@/components/Splash";
+import FPSMeter from "@/components/FPSMeter";
 
 export default function Home() {
   return (
     <div>
+      <FPSMeter />
       <Splash />
       <Scene />
       <ScrollingText
@@ -30,16 +32,15 @@ export default function Home() {
       <div id="animation-container" className="">
         <Hero />
         <Introduce />
-       
         <SweatLess />
         <div>
           <Proven />
         </div>
       </div>
 
-      <StickAnimation />
-      <SprayAnimation />
-      <WhySummr />
+       <StickAnimation />
+     <SprayAnimation />
+     <WhySummr />
       <Customize />
       <Founder />
       <Subscribe />

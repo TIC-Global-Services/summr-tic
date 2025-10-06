@@ -166,7 +166,7 @@ const CustomizeComponent = () => {
           <button
             type="button"
             onClick={handlePrevious}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
+            className="md:block hidden absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
             aria-label="Previous model"
           >
             <ChevronLeft className="w-6 h-6 text-gray-700 hover:text-black transition-colors duration-200" />
@@ -175,14 +175,33 @@ const CustomizeComponent = () => {
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
+            className="md:block hidden absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
             aria-label="Next model"
           >
             <ChevronRight className="w-6 h-6 text-gray-700 hover:text-black transition-colors duration-200" />
           </button>
 
+<div className="md:hidden  absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
+              aria-label="Previous model"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-700 hover:text-black transition-colors duration-200" />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all duration-200"
+              aria-label="Next model"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-700 hover:text-black transition-colors duration-200" />
+            </button>
+          </div>
           {/* Models Container with consistent positioning */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full lg:-space-x-30 -space-x-0">
+          <div className="grid grid-cols-2 lg:grid-cols-2 w-full h-full lg:-space-x-30 -space-x-0">
             {/* Stick Model */}
             <div className="flex items-center justify-center h-[450px] xl:h-[600px] lg:h-[600px] md:h-[600px]">
               <div className="w-full h-full flex items-center justify-center relative">
@@ -201,7 +220,7 @@ const CustomizeComponent = () => {
             </div>
 
             {/* Spray Model */}
-            <div className="flex items-center justify-center h-[390px] xl:h-[600px] lg:h-[600px] md:h-[600px]">
+            <div className="flex items-center justify-center h-[390px] md:mt-0 mt-6 xl:h-[600px] lg:h-[600px] md:h-[600px]">
               <div className="w-full h-full flex items-center justify-center relative pointer-events-none select-none">
                 <CustomModelViewer
                   key={sprayKey}

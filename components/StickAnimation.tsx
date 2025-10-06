@@ -23,6 +23,8 @@ const StickAnimation = () => {
     const refillElement = refillRef.current;
     const capElement = capRef.current;
     const scrollRefElement = scrollRef.current;
+        const isMobile = window.innerWidth <= 768;
+        const endValue = isMobile ? "+=350%" : "+=180%";
 
     if (
       !container ||

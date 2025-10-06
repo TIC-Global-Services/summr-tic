@@ -25,7 +25,8 @@ const SprayAnimation = () => {
     const refillElement = refillRef.current;
     const capElement = capRef.current;
     const isMobile = window.innerWidth <= 768;
-    const endValue = isMobile ? "+=140%" : "+=170%";
+    const startValue = isMobile ? "bottom+=80% bottom" : "bottom bottom"
+    const endValue = isMobile ? "+=150%" : "+=170%";
     const scrollRefElement = scrollRef.current;
 
 
@@ -41,7 +42,7 @@ const SprayAnimation = () => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: "bottom bottom",
+        start: startValue,
        end: endValue,
         scrub: 1, // Smooth scrubbing
         pin: false,
@@ -140,7 +141,7 @@ const SprayAnimation = () => {
 
   return (
     
-     <div ref={containerRef} className="relative min-h-[300vh] bg-white">
+     <div ref={containerRef} className="relative md:min-h-[300vh] min-h-[100vh] bg-white">
       
       {/* Case - Bottom Right */}
       <div

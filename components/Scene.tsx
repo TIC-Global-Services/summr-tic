@@ -386,7 +386,7 @@ const Scene = () => {
       position: [16, 14, 16] as [number, number, number],
     },
     gl: {
-      antialias: false,
+      antialias: true,
       alpha: true,
       
     },

@@ -2,6 +2,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
+import { useGLTF } from "@react-three/drei";
 
 const Splash: React.FC = () => {
   const [progress, setProgress] = useState(0);
@@ -80,19 +81,9 @@ const Splash: React.FC = () => {
       }
     };
 
-    // Check if fonts are already loaded
-    const checkFontsLoaded = async () => {
-      try {
-        await document.fonts.ready;
-        executeStep();
-      } catch {
-        executeStep();
-      }
-    };
-
-    // Preload critical resources
-    const preloadResources = () => {
-      const criticalAssets = [
+    // ✅ Proper preloading of 3D models into drei/GLTF cache
+    const preloadGLTFModels = () => {
+      const gltfAssets = [
         "/models/s.glb",
         "/models/sp.glb",
         "/customize/case-navy.glb",
@@ -104,9 +95,14 @@ const Splash: React.FC = () => {
         "/customize/Spray-case-navy.glb",
         "/customize/Spray-case-pink.glb",
         "/customize/Spray-case-teal.glb",
-        "/spray.json",
-        "/stick.json"
       ];
+
+      gltfAssets.forEach((asset) => useGLTF.preload(asset));
+    };
+
+    // ✅ Preload other JSON or small static resources
+    const preloadResources = () => {
+      const criticalAssets = ["/spray.json", "/stick.json"];
 
       criticalAssets.forEach((asset) => {
         const link = document.createElement("link");
@@ -118,7 +114,18 @@ const Splash: React.FC = () => {
       });
     };
 
+    preloadGLTFModels();
     preloadResources();
+
+    // Check if fonts are already loaded
+    const checkFontsLoaded = async () => {
+      try {
+        await document.fonts.ready;
+        executeStep();
+      } catch {
+        executeStep();
+      }
+    };
 
     // Start loading process
     setTimeout(checkFontsLoaded, 500);
@@ -164,16 +171,14 @@ const Splash: React.FC = () => {
 
             {/* Progress percentage with new font style */}
             <div className="flex justify-end w-full">
-              <div className=" custom-percentage text-[100px] text-white font-bold tracking-wider drop-shadow-lg">
+              <div className="custom-percentage text-[100px] text-white font-bold tracking-wider drop-shadow-lg">
                 {Math.round(progress)}%
               </div>
             </div>
           </div>
         </div>
       </div>
- 
     </div>
-    
   );
 };
 

@@ -3,7 +3,8 @@
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, Center, Environment, OrbitControls } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
-import { useRef } from "react";
+import { useRef, Suspense, useMemo, useState, useEffect } from "react";
+import * as THREE from "three";
 
 interface ModelProps {
   modelPath: string;
@@ -11,12 +12,27 @@ interface ModelProps {
   position?: [number, number, number];
 }
 
+useGLTF.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
+
+
 const Model = ({ modelPath, scale = 1, position = [0, 0, 0] }: ModelProps) => {
   const { scene } = useGLTF(modelPath);
+  
+  // Clone scene to avoid issues with multiple instances
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone(true);
+    // Traverse and ensure materials are properly cloned
+    clone.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = child.material.clone();
+      }
+    });
+    return clone;
+  }, [scene]);
 
   return (
     <Center position={position}>
-      <primitive object={scene} scale={scale} />
+      <primitive object={clonedScene} scale={scale} />
     </Center>
   );
 };
@@ -40,10 +56,16 @@ const CustomModelViewer = ({
   environmentIntensity = 1,
   position = [0, 0, 0],
 }: CustomModelViewerProps) => {
+  const [isMounted, setIsMounted] = useState(false);
   const isDesktop = useMediaQuery({ minWidth: 1000 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const controlsRef = useRef<any>(null);
+
+  // Ensure component is mounted before rendering
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const getInteractionSettings = () => {
     if (isMobile) {
@@ -67,7 +89,6 @@ const CustomModelViewer = ({
     if (controlsRef.current && !isMobile) {
       const controls = controlsRef.current;
       const currentTarget = controls.target;
-
       const minY = -1;
       const maxY = 1;
 
@@ -154,6 +175,15 @@ const CustomModelViewer = ({
 
   const containerStyle = getContainerStyle();
 
+  // Don't render until mounted to avoid hydration issues
+  if (!isMounted) {
+    return (
+      <div className={`flex justify-center items-center w-full h-full ${className}`}>
+        <div style={containerStyle} />
+      </div>
+    );
+  }
+
   return (
     <div className={`flex justify-center items-center w-full h-full ${className}`}>
       <div style={containerStyle}>
@@ -179,34 +209,57 @@ const CustomModelViewer = ({
             margin: "0 auto",
           }}
           gl={{
+            powerPreference: isMobile ? "low-power" : "high-performance",
+            antialias: true,
+            alpha: true,
+            stencil: false,
+            depth: true,
             toneMappingExposure: exposure,
+            outputColorSpace: THREE.SRGBColorSpace,
+            // Better quality settings
+            preserveDrawingBuffer: false,
+            logarithmicDepthBuffer: false,
           }}
+          dpr={isMobile ? [1, 2] : [1, 2]}
+          frameloop={isMobile ? "always" : "demand"}
+          performance={{ min: 0.5 }}
         >
-    
-          <Environment
-            preset={environment as any}
-            environmentIntensity={environmentIntensity}
-          />
+          <Suspense fallback={null}>
+            <Environment
+              preset={environment as any}
+              environmentIntensity={isMobile ? environmentIntensity * 0.8 : environmentIntensity}
+            />
 
-          <Model modelPath={modelPath} scale={scale} position={position} />
+            <Model modelPath={modelPath} scale={scale} position={position} />
+            
+            {/* Better lighting for mobile */}
+            {isMobile && (
+              <>
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[10, 10, 5]} intensity={1} />
+              </>
+            )}
+          </Suspense>
 
-          <OrbitControls
-            ref={controlsRef}
-            autoRotate={false}
-            enableZoom={false}
-            enablePan={interactions.enablePan}
-            enableRotate={interactions.enableRotate}
-            zoomSpeed={0}
-            minDistance={cameraConfig.minDistance}
-            maxDistance={cameraConfig.maxDistance}
-            minPolarAngle={Math.PI / 5}
-            maxPolarAngle={Math.PI - Math.PI / 5}
-            dampingFactor={0.05}
-            enableDamping
-            panSpeed={0.5}
-            onChange={handleControlsChange}
-            target={[0, 0, 0]}
-          />
+          {!isMobile && (
+            <OrbitControls
+              ref={controlsRef}
+              autoRotate={false}
+              enableZoom={false}
+              enablePan={interactions.enablePan}
+              enableRotate={interactions.enableRotate}
+              zoomSpeed={0}
+              minDistance={cameraConfig.minDistance}
+              maxDistance={cameraConfig.maxDistance}
+              minPolarAngle={Math.PI / 5}
+              maxPolarAngle={Math.PI - Math.PI / 5}
+              dampingFactor={0.05}
+              enableDamping
+              panSpeed={0.5}
+              onChange={handleControlsChange}
+              target={[0, 0, 0]}
+            />
+          )}
         </Canvas>
       </div>
     </div>

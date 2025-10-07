@@ -19,7 +19,7 @@ import FPSMeter from "@/components/FPSMeter";
 export default function Home() {
   return (
     <div>
-      <FPSMeter />
+      {/* <FPSMeter /> */}
       <Splash />
       <Scene />
       <ScrollingText

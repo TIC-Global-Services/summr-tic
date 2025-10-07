@@ -47,7 +47,7 @@ const StickAnimation = () => {
       scrollTrigger: {
         trigger: container,
         start: "top 10%",
-        end: "+180%",
+        end: endValue,
         scrub: 1, // Smooth scrubbing
         pin: false,
         anticipatePin: 1,

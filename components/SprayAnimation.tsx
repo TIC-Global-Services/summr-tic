@@ -26,7 +26,7 @@ const SprayAnimation = () => {
     const capElement = capRef.current;
     const isMobile = window.innerWidth <= 768;
     const startValue = isMobile ? "bottom+=80% bottom" : "bottom bottom"
-    const endValue = isMobile ? "+=150%" : "+=170%";
+    const endValue = isMobile ? "+=170%" : "+=170%";
     const scrollRefElement = scrollRef.current;
 
 
